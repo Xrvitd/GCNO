@@ -1,0 +1,6 @@
+newmtl BKLineColorBar
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.384296 0.194061 0.174387
+Ns 64
+map_Kd BKLineColorBar.png
