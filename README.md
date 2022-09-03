@@ -44,6 +44,8 @@ ALL_BUILD->INSTALL
 
 The example and data is in 'test'. Include RFEPS in your project when testing and using it.
 
+The Restricted Power Diagram(RPD) in this project is a version that we implemented to facilitate debugging. If you want to get the fastest running speed, please use:
+https://github.com/basselin7u/GPU-Restricted-Power-Diagrams
 
 
 
