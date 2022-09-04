@@ -40,12 +40,26 @@ Configure->Generate->Open Project
 
 ALL_BUILD->INSTALL
 
+
+
 ## Test
 
-The example and data is in 'test'. Include RFEPS in your project when testing and using it.
+The example is in 'MAIN'. Include RFEPS in your project when testing and using it.
+
+All the files is in 'RFEPS\data'. 
+
+Please open ``OPENMP`` in Visual Studio to get the best performance.
 
 The Restricted Power Diagram(RPD) in this project is a version that we implemented to facilitate debugging. If you want to get the fastest running speed, please use:
 https://github.com/basselin7u/GPU-Restricted-Power-Diagrams
+
+
+## Testing Platform
+- Windows 10 
+- Visual Studio 2022
+- AMD Ryzen 5950X
+- 64GB Momery
+
 
 
 
