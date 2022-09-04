@@ -28,10 +28,81 @@
 using namespace nanoflann;
 using namespace alglib;
 
-
+typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+typedef Kernel::Point_3 Point1;
+typedef Kernel::Vector_3 Vector;
+typedef std::pair<Point1, Vector> Pwn;
+typedef CGAL::Polyhedron_3<Kernel> Polyhedron1;
 
 int rnnnum = 80;
 
+void Poisson(string modelpath, string model)
+{
+	clock_t start, end;
+	start = clock();
+
+
+	string outputPath = modelpath;
+
+	//ifstream in("E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\famous_pts_normal\\timing\\" + model + ".xyz");
+
+	std::vector<Pwn> points;
+	if (!CGAL::IO::read_points(CGAL::data_file_path(modelpath + "Denoise_Final_"+model+".xyz"), std::back_inserter(points),
+		CGAL::parameters::point_map(CGAL::First_of_pair_property_map<Pwn>())
+		.normal_map(CGAL::Second_of_pair_property_map<Pwn>())))
+	{
+		std::cerr << "Error: cannot read input file!" << std::endl;
+		return;
+	}
+	Polyhedron1 output_mesh;
+	double average_spacing = CGAL::compute_average_spacing<CGAL::Sequential_tag>
+		(points, 6, CGAL::parameters::point_map(CGAL::First_of_pair_property_map<Pwn>()));
+	if (CGAL::poisson_surface_reconstruction_delaunay
+	(points.begin(), points.end(),
+		CGAL::First_of_pair_property_map<Pwn>(),
+		CGAL::Second_of_pair_property_map<Pwn>(),
+		output_mesh, average_spacing))
+	{
+		std::ofstream out(outputPath + "\\model_poisson_" + model + ".off");
+		out << output_mesh;
+	}
+	ifstream in(outputPath + "\\model_poisson_" + model + ".off");
+	vector<Eigen::Vector3d> pts;
+	vector<Eigen::Vector3i> facs;
+	
+	string line;
+	in >> line;
+	int q, w, e;
+	in >> q >> w >> e;
+	for (int i = 0; i < q; i++)
+	{
+		double x, y, z;
+		in >> x >> y >> z;
+		pts.push_back(Eigen::Vector3d(x, y, z));
+	}
+	for (int i = 0; i < w; i++)
+	{
+		int a, x, y, z;
+		in >>a>> x >> y >> z;
+		facs.push_back(Eigen::Vector3i(x, y, z));
+	}
+	std::ofstream outobj(outputPath + "\\model_poisson_" + model + ".obj");
+	
+	for (int i = 0; i < q; i++)
+	{
+		outobj << "v " << pts[i].transpose() << endl;
+	}
+	for (int i = 0; i < w; i++)
+	{
+		outobj << "f " << (facs[i]+ Eigen::Vector3i(1,1,1)).transpose() << endl;
+	}
+	outobj.close();
+
+
+	end = clock();
+	double endtime = (double)(end - start) / CLOCKS_PER_SEC;
+	cout << "Poisson Running Time: " << endtime << endl;
+}
 
 pair<double, double>  V3toV2(Eigen::Vector3d nor)
 {
@@ -106,7 +177,7 @@ pair<double, double>  V3toV2(Eigen::Vector3d nor)
 
 
 
-void RFEPSTest(string model)
+void RFEPSTest(string modelpath,string model,bool ifdenoise)
 {
 	clock_t start, end;
 	vector<Eigen::Vector3d> Vall, Nall;
@@ -121,12 +192,20 @@ void RFEPSTest(string model)
 	//string model = "0.005_50000_00040123_8fc7d06caf264003a242597a_trimesh_000";
 	//string modelnn = "DenoisePoints";
 
-	string outputFile = "Results_noise0.0025";
-	string outputPath = "E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\";
+	
+	string outputPath = modelpath;
 
 	//ifstream in("E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\"+ outputFile +"\\" +model+"\\"+model+".xyz");
 	//ifstream in("E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\" + outputFile + "\\" + model + "\\01_"+model+".xyz");
-	ifstream in("E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\" + outputFile + "\\" + model + "\\DenoisePoints.xyz");
+	ifstream in;
+	if (ifdenoise)
+	{
+		in.open(outputPath + "\\Denoise_" + model + ".xyz");
+	}
+	else
+	{
+		in.open(outputPath + "\\" + model + ".xyz");
+	}
 
 	while (!in.eof())
 	{
@@ -164,7 +243,7 @@ void RFEPSTest(string model)
 		Vall[i].y() = (Vall[i].y() - minp.y()) / (maxl);
 		Vall[i].z() = (Vall[i].z() - minp.z()) / (maxl);
 	} //
-	out.open("E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\" + outputFile + "\\" + model + "\\" + "01_" + model + ".xyz");
+	out.open(outputPath + "\\01_" + model + ".xyz");
 	for (size_t i = 0; i < r; i++)
 	{
 		out << Vall[i].transpose() << " " << Nall[i].transpose() << endl;
@@ -258,7 +337,7 @@ void RFEPSTest(string model)
 #pragma omp parallel for schedule(dynamic, 20)  //part 1
 	for (int iter = 0; iter < r; iter++) // part 1
 	{
-
+		//cout << iter << endl;
 		omp_cnt++;
 		std::function<void(const alglib::real_1d_array& x, double& func, alglib::real_1d_array& grad, void* ptr)> fop_lambda
 			= [&](const alglib::real_1d_array& x, double& func, alglib::real_1d_array& grad, void* ptr) -> void
@@ -488,9 +567,6 @@ void RFEPSTest(string model)
 			}
 		}
 		
-		
-		
-
 
 		double u1 = x0[k], v1 = x0[k + 1], u2 = x0[k + 2], v2 = x0[k + 3];
 		Eigen::Vector3d n1(sin(u1) * cos(v1), sin(u1) * sin(v1), cos(u1));
@@ -515,15 +591,7 @@ void RFEPSTest(string model)
 		angle = angle * 180 / 3.1415926535;
 		if (debugOutput)
 			cout << "angle " << angle << endl;
-		//if (angle > 60&&angle <120)
-		//{
-		//	R3[iter] = 1; // normal point
-		//}
-		//else
-		//{
-		//	R3[iter] = 0; 
-		//}
-		//
+
 		if (dis < 30 / 100.0) // importent
 		{
 			R3[iter] = 1; // normal point
@@ -546,13 +614,13 @@ void RFEPSTest(string model)
 
 	if (IfoutputFile)
 	{
-		out.open(outputPath + outputFile + "\\" + model + "\\ShowColorR2.txt");
+		out.open(outputPath  + "\\ShowColorR2_"+model+".txt");
 		for (int i = 0; i < r; i++)
 		{
 			out << Vall[i].x() << " " << Vall[i].y() << " " << Vall[i].z() << " " << R2[i] << " 0.1 0.1 \n";
 		}
 		out.close();
-		out.open(outputPath + outputFile + "\\" + model + "\\ShowColorR3.txt");
+		out.open(outputPath + "\\ShowColorR3_" + model + ".txt");
 		for (int i = 0; i < r; i++)
 		{
 			out << Vall[i].x() << " " << Vall[i].y() << " " << Vall[i].z() << " " << R3[i] << " 0.1 0.1 \n";
@@ -1045,7 +1113,7 @@ void RFEPSTest(string model)
 	
 	if (IfoutputFile)
 	{
-		out.open(outputPath + outputFile + "\\" + model + "\\ShowNormal.xyz");
+		out.open(outputPath + "\\ShowNormal_" + model + ".xyz");
 		for (int i = 0; i < r; i++)
 		{
 			int k = neighboor[i].size();
@@ -1202,7 +1270,7 @@ void RFEPSTest(string model)
 	{
 		
 		BGAL::_LBFGS::_Parameter param = BGAL::_LBFGS::_Parameter();
-		param.epsilon = 1e-5;
+		param.epsilon = 1e-4;
 		param.is_show = true;
 		param.max_iteration = 35;
 		param.max_linearsearch = 5;
@@ -1275,7 +1343,7 @@ void RFEPSTest(string model)
 		cout << "maxk: " << maxk << "   mink:" << mink << endl;
 	
 
-	ofstream fout(outputPath + outputFile + "\\" + model + "\\DenoisePoints_Final.xyz");
+	ofstream fout(outputPath +"\\Denoise_Final_" + model + ".xyz");
 	for (size_t i = 0; i < r; i++)
 	{
 		int k = neighboor_denoise[i].size();
@@ -1543,7 +1611,7 @@ void RFEPSTest(string model)
 		}
 		out.close();*/
 
-		out.open(outputPath + outputFile + "\\" + model + "\\FeaturePoints_angle.xyz");
+		out.open(outputPath + "\\FeaturePoints_" + model + ".xyz");
 		for (auto np : NewPoints)
 		{
 			if (flag3[np.first])
@@ -1554,7 +1622,7 @@ void RFEPSTest(string model)
 		}
 		out.close();
 
-		out.open(outputPath + outputFile + "\\" + model + "\\FinalPointCloud.xyz");
+		out.open(outputPath + "\\FinalPointCloud1_" + model + ".xyz");
 		vector<bool> flag2(r, 0);
 		for (auto np : NewPoints)
 		{
@@ -1588,7 +1656,7 @@ void RFEPSTest(string model)
 		}*/
 		out.close();
 
-		out.open(outputPath + outputFile + "\\" + model + "\\FinalPointCloud_forZX.xyz");
+		out.open(outputPath + "\\FinalPointCloud2_" + model + ".xyz");
 		vector<bool> flag22(r, 0);
 		for (auto np : NewPoints)
 		{
@@ -1614,7 +1682,7 @@ void RFEPSTest(string model)
 		out.close();
 
 
-		out.open(outputPath + outputFile + "\\" + model + "\\FinalPointCloud_NoFeature.xyz");
+		out.open(outputPath + "\\FinalPointCloud_WithoutFeature_" + model + ".xyz");
 		
 		for (auto np : NewPoints)
 		{
@@ -1638,7 +1706,7 @@ void RFEPSTest(string model)
 		}
 		out.close();
 		
-		out.open(outputPath + outputFile + "\\" + model + "\\FeaturePointsNum.txt");
+		out.open(outputPath + "\\FeaturePointsNum_" + model + ".txt");
 		int cnt = 0;
 		for (auto np : NewPoints)
 		{
@@ -1652,7 +1720,7 @@ void RFEPSTest(string model)
 		out << cnt << endl;
 		out.close();
 
-		out.open(outputPath + outputFile + "\\" + model + "\\radis.txt");
+		out.open(outputPath + "\\radis_" + model + ".txt");
 		
 		out << radis << endl;
 		out.close();
@@ -1668,7 +1736,7 @@ void RFEPSTest(string model)
 }
 
 
-void DenoiseTest(string model)
+void DenoiseTest(string modelpath,string model)
 {
 	clock_t start, end;
 
@@ -1682,12 +1750,12 @@ void DenoiseTest(string model)
 	//string model = "angleWithNor";
 	//string model = "0.005_50000_00040123_8fc7d06caf264003a242597a_trimesh_000";
 
-	string outputFile = "Results_noise0.0025";
-	string outputPath = "E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\";
+	
+	string outputPath = modelpath;
 
 	//ifstream in("E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\Noise\\abc_chunk4\\0.0025\\" + model + ".xyz");
 
-	ifstream in(outputPath + outputFile + "\\" + model + "\\01_" + model + ".xyz");
+	ifstream in(outputPath + model + ".xyz");
 	int ppid = 0;
 	while (!in.eof())
 	{
@@ -1701,15 +1769,7 @@ void DenoiseTest(string model)
 		}
 		
 	}
-	//out Vall
-	ofstream outSample( outputPath + outputFile + "\\" + model + "\\" + model + "_sample.xyz");
 
-	for (size_t i = 0; i < Vall.size(); i++)
-	{
-		outSample << Vall[i].transpose() << " " << Nall[i].transpose() << endl;
-	}
-	outSample.close();
-	
 	cout << "Read PointCloud. xyz File. \n";
 	int r = Vall.size();
 	Eigen::Vector3d maxp(-99999, -99999, -99999);
@@ -1994,7 +2054,7 @@ void DenoiseTest(string model)
 	cout << "Running Time: " << endtime * 1000 << " ms " << endl;
 
 
-	ofstream fout(outputPath+ outputFile+"\\"+model+"\\DenoisePoints.xyz");
+	ofstream fout(outputPath+"\\Denoise_"+ model +".xyz");
 	
 	for (size_t i = 0; i < r; i++)
 	{
@@ -2007,26 +2067,32 @@ void DenoiseTest(string model)
 	}
 	fout.close();
 
-
-
 }
 
 
 
 int main()
 {
-	string model = "0.0025_00042242_2bb56f8dd30c45fdb343b0ce_trimesh_000";
+	string modelpath = "..//..//data//";
+	
+	string modelname = "01_82-block";
 
 
 	std::cout << "====================RFEPSTest" << std::endl;
 
-	rnnnum = 85;
+	rnnnum = 60;
+	bool denoise = 0;
+	//if your input point cloud is noisy, please open the following code
+	if (denoise)
+	{
+		rnnnum *= 2.0;
+		//DenoiseTest(modelpath,modelname);
+	}
 
-
-	DenoiseTest(model);
-	RFEPSTest(model);
-	Comput_rnn(model);
-	Comput_RPD(model);
+	RFEPSTest(modelpath,modelname, denoise);
+	Poisson(modelpath, modelname);
+	Comput_rnn(modelpath,modelname);
+	Comput_RPD(modelpath,modelname);
 	
 	std::cout << "successful!" << std::endl;
 	

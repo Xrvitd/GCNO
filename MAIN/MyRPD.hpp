@@ -164,7 +164,7 @@ void add_point(double x, double y, double z, double w) {
 
 };
 
-void Comput_RPD(string modelName)
+void Comput_RPD(string modelpath,string modelName)
 {
 
 
@@ -197,14 +197,14 @@ void Comput_RPD(string modelName)
 
         //74488
         //string filePath = "data\\";
-        string filePath = "E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\Results_noise0.0025\\";
+        string filePath = modelpath;
         //string filePath = "D:\\SIG-BigExps\\00040123_8fc7d06caf264003a242597a_trimesh_000\\rsmall\\";
        // string modelName = "lucy";
         //string modelName = files[filenum];
         MyHalfEdgeModel* PoissonModel = new MyHalfEdgeModel();
-        PoissonModel->ReadObjFile((filePath + modelName + "\\model_poisson.obj").c_str());
+        PoissonModel->ReadObjFile((filePath + "\\model_poisson_"+ modelName +".obj").c_str());
         double radis = 0;
-        ifstream inRnum(filePath + modelName + "\\radis.txt");
+        ifstream inRnum(filePath  + "\\radis_" + modelName + ".txt");
         inRnum >> radis;
         inRnum.close();
         cout << radis << endl;
@@ -217,10 +217,10 @@ void Comput_RPD(string modelName)
 
         //PCmodel.WriteXYZFile("data\\outtest.xyz", true);
         //VersPC_ori = PCmodel.GetVertices();
-        ifstream inFnum(filePath + modelName + "\\FeaturePointNum.txt");
+        ifstream inFnum(filePath  + "\\FeaturePointNum_" + modelName + ".txt");
 
-        ifstream inNewPs(filePath + modelName + "\\PoissonPoints_qc.xyz");
-        ifstream inOriPs(filePath + modelName + "\\OriPoints_qc.xyz");
+        ifstream inNewPs(filePath  + "\\PoissonPoints_qc_" + modelName + ".xyz");
+        ifstream inOriPs(filePath  + "\\OriPoints_qc_" + modelName + ".xyz");
         int n = 0;
         double x11, y11, z11;
         while (inNewPs >> x11 >> y11 >> z11)
@@ -252,7 +252,7 @@ void Comput_RPD(string modelName)
         vector<vector<int>> neighboor;
 
         //Knn KnnPC(filePath + modelName + "\\knn50_qc.txt", n, 50, true);
-        Knn KnnPoisson(filePath + modelName + "\\knn50_poisson.txt", n, 50, false);
+        Knn KnnPoisson(filePath + "\\knn50_poisson_" + modelName + ".txt", n, 50, false);
         cout << "Read Knn.\n";
         cout << n << endl;
 
@@ -379,7 +379,7 @@ void Comput_RPD(string modelName)
         cout << "Read Poisson model.\n";
 
         //#pragma omp parallel for schedule(dynamic,20)
-        ofstream outPts(filePath + modelName + "\\CenterPoints_" + modelName + ".xyz");
+        ofstream outPts(filePath  + "\\CenterPoints_" + modelName + ".xyz");
 
         outPts.precision(15);
         outPts.flags(ios::left | ios::fixed);
@@ -1244,7 +1244,7 @@ void Comput_RPD(string modelName)
         {
             degree[p.first] = 0;
         }*/
-        ofstream outRVD(filePath + modelName + "\\RVD_" + modelName + ".obj");
+        ofstream outRVD(filePath + "\\RVD_" + modelName + ".obj");
 
         outRVD.precision(15);
         outRVD.flags(ios::left | ios::fixed);
@@ -1318,7 +1318,7 @@ void Comput_RPD(string modelName)
 
         //    outl << "l " << mp.first.first + 1 << " " << mp.first.second + 1 << "\n";
         //}
-        ofstream outRemesh(filePath + modelName + "\\Remesh_" + modelName + ".obj");
+        ofstream outRemesh(filePath + "\\Remesh_" + modelName + ".obj");
         outRemesh.precision(15);
         outRemesh.flags(ios::left | ios::fixed);
         outRemesh.fill('0');
@@ -1696,7 +1696,7 @@ void Comput_RPD(string modelName)
             outRemesh << "f " << f.x() + 1 << " " << f.y() + 1 << " " << f.z() + 1 << endl;
         }
 
-        ofstream outEdge(filePath + modelName + "\\Edges_" + modelName + ".obj");
+        ofstream outEdge(filePath +  "\\Edges_" + modelName + ".obj");
         outEdge.precision(15);
         outEdge.flags(ios::left | ios::fixed);
         outEdge.fill('0');
@@ -1721,7 +1721,7 @@ void Comput_RPD(string modelName)
         }
         outEdge.close();
 
-        ofstream outFeatureLine(filePath + modelName + "\\FeatureLine_" + modelName + ".obj");
+        ofstream outFeatureLine(filePath + "\\FeatureLine_" + modelName + ".obj");
         outFeatureLine.precision(15);
         outFeatureLine.flags(ios::left | ios::fixed);
         outFeatureLine.fill('0');
@@ -1742,7 +1742,7 @@ void Comput_RPD(string modelName)
         
 
         MyHalfEdgeModel FinalModel;
-        FinalModel.ReadObjFile((filePath + modelName + "\\Remesh_" + modelName + ".obj").c_str());
+        FinalModel.ReadObjFile((filePath +"\\Remesh_" + modelName + ".obj").c_str());
         auto Fedges = FinalModel.GetEdges();
         auto Ffaces = FinalModel.GetFaces();
         auto Fvecs = FinalModel.GetVertices();

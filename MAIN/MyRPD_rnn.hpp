@@ -74,11 +74,11 @@ public:
 };
 vector<string> files;
 
-void Comput_rnn(string modelname)
+void Comput_rnn(string modelpath,string modelname)
 {
 
-	string outputFile = "Results_noise0.0025";
-	string filePath = "E:\\Dropbox\\MyProjects\\SIG-2022-Feature-preserving-recon\\data\\"+ outputFile +"\\";
+
+	string filePath = modelpath;
 	string ss;
 
 	{
@@ -103,12 +103,12 @@ void Comput_rnn(string modelname)
 
 
 		//string modelname = "cube";
-		string model_num = "FinalPointCloud";
-		string file = filePath + modelname + "\\";
+		string model_num = "FinalPointCloud1_"+ modelname;
+		string file = filePath;
 		//string file = filePath+"Result_abc_0004\\" + modelname + "\\";
-		string filen = file + "knn50.txt";
-		string filenNew = file + "knn50_qc.txt";
-		string filenPoisson = file + "knn50_poisson.txt";
+		string filen = file + "knn50_"+ modelname +".txt";
+		string filenNew = file + "knn50_qc_" + modelname + ".txt";
+		string filenPoisson = file + "knn50_poisson_" + modelname + ".txt";
 
 		//ofstream outknn(filen);
 		ofstream outknnNew(filenNew);
@@ -116,20 +116,20 @@ void Comput_rnn(string modelname)
 		MyPointCloudModel PCmodel;
 		PCmodel.ReadXYZFile((file + model_num + ".xyz").c_str(), true);
 		int FeatureN = -1; double radis;
-		ifstream inFnum(file + "FeaturePointsNum.txt");
+		ifstream inFnum(file + "FeaturePointsNum_" + modelname + ".txt");
 		inFnum >> FeatureN;
 		inFnum.close();
-		ifstream inRnum(file + "radis.txt");
+		ifstream inRnum(file + "radis_" + modelname + ".txt");
 		inRnum >> radis;
 		inRnum.close();
-		radis *= 2;
+		radis *= 4;
 		//radis = 0.0025;
 		cout << radis << endl;
 
 		
 
 		MyHalfEdgeModel* PoissonModel = new MyHalfEdgeModel();
-		PoissonModel->ReadObjFile((file + "model_poisson.obj").c_str());
+		PoissonModel->ReadObjFile((file + "model_poisson_" + modelname + ".obj").c_str());
 		
 		/*ofstream outOFF(file + "model_poisson.off");
 		outOFF << "OFF\n";
@@ -148,7 +148,7 @@ void Comput_rnn(string modelname)
 
 
 		Polyhedron polyhedron;
-		std::ifstream input(file + "model_poisson.off");
+		std::ifstream input(file + "model_poisson_" + modelname + ".off");
 
 
 		cout << "Read point cloud.\n";
@@ -163,9 +163,9 @@ void Comput_rnn(string modelname)
 		//MyAABBTree* MyTree = new MyAABBTree("data\\cube_poisson.off");
 		Tree tree(faces(polyhedron).first, faces(polyhedron).second, polyhedron);
 		vector<Eigen::Vector3d> VersPC;
-		ofstream outFnum(file + "FeaturePointNum.txt");
-		ofstream outNps(file + "PoissonPoints_qc.xyz");
-		ofstream outNpsori(file + "OriPoints_qc.xyz");
+		ofstream outFnum(file + "FeaturePointNum_" + modelname + ".txt");
+		ofstream outNps(file + "PoissonPoints_qc_" + modelname + ".xyz");
+		ofstream outNpsori(file + "OriPoints_qc_" + modelname + ".xyz");
 		outNps.precision(15);
 		outNps.flags(ios::left | ios::fixed);
 		outNps.fill('0');
