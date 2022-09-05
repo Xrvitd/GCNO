@@ -70,7 +70,11 @@ If you use our code, please consider citing our work:
   title     = {RFEPS: Reconstructing Feature-line Equipped Polygonal Surface},
   journal   = {ACM Transactions on Graphics (TOG)},
   year      = {2022},
-  publisher = {ACM}
+  publisher = {ACM},
+  doi = {10.1145/3550454.3555443},
+  booktitle = {ACM SIGGRAPH Asia 2022 Papers},
+  numpages = {15},
+  series = {SIGGRAPH Asia '22}
 }
 ```
 Coming soon.
