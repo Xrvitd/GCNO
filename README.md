@@ -65,7 +65,7 @@ https://github.com/basselin7u/GPU-Restricted-Power-Diagrams
 If you use our code, please consider citing our work:
 ```
 @article{Rui2022RFEPS,
-  author    = {Rui Xu, Zixiong Wang, Zhiyang Dou, Zong Chen, Shiqing Xin, Mingyan Jiang, Tao Ju, Changhe Tu},
+  author    = {Xu, Rui and Wang, Zixiong and Dou, Zhiyang and Zong, Chen and Xin, Shiqing and Jiang, Mingyan and Ju, Tao and Tu, Changhe},
   title     = {RFEPS: Reconstructing Feature-line Equipped Polygonal Surface},
   journal   = {ACM Transactions on Graphics (TOG)},
   year      = {2022},
