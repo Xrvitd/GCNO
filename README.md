@@ -1,4 +1,4 @@
-# RFEPS: Reconstructing Feature-line Equipped Polygonal Surface (Working, temporarily unavailable)
+# RFEPS: Reconstructing Feature-line Equipped Polygonal Surface 
 Code of RFEPS (SIGGRAPH Asia 2022 Conditionally Accepted).
 
 Thanks for the simple and easy to use BGAL library: https://github.com/BKHao/BGAL
@@ -9,7 +9,7 @@ Thanks for the simple and easy to use BGAL library: https://github.com/BKHao/BGA
 - Eigen3
 - Boost
 
-### Makefile builds (Linux, other Unixes, and Mac)
+### Makefile builds (Linux, other Unixes, and Mac. But we recommend using Windows.)
 
 ```
 git clone https://github.com/Xrvitd/RFEPS
@@ -62,7 +62,6 @@ https://github.com/basselin7u/GPU-Restricted-Power-Diagrams
 
 
 
-
 If you use our code, please consider citing our work:
 ```
 @article{Rui2022RFEPS,
@@ -77,4 +76,5 @@ If you use our code, please consider citing our work:
   series = {SIGGRAPH Asia '22}
 }
 ```
-Coming soon.
+
+Working, a more concise and readable version is coming soon...
