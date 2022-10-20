@@ -61,7 +61,18 @@ https://github.com/basselin7u/GPU-Restricted-Power-Diagrams
 - 64GB Momery
 
 
+If you use our code, please consider citing our work:
+```
+@article{Rui2022RFEPS,
+  author    = {Xu, Rui and Wang, Zixiong and Dou, Zhiyang and Zong, Chen and Xin, Shiqing and Jiang, Mingyan and Ju, Tao and Tu, Changhe},
+  title     = {RFEPS: Reconstructing Feature-line Equipped Polygonal Surface},
+  journal   = {ACM Transactions on Graphics (TOG)},
+  year      = {2022},
+  publisher = {ACM},
+  doi = {10.1145/3550454.3555443},
+  booktitle = {ACM SIGGRAPH Asia 2022 Papers},
+  numpages = {15},
+  series = {SIGGRAPH Asia '22}
+}
+```
 
-
-
-Working, a more concise and readable version is coming soon...
