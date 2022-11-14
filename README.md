@@ -1,8 +1,6 @@
 # RFEPS: Reconstructing Feature-line Equipped Polygonal Surface 
 Code of RFEPS.
 
-Thanks for the simple and easy to use BGAL library: https://github.com/BKHao/BGAL
-
 ### Dependence
 
 - CGAL 
@@ -60,6 +58,7 @@ https://github.com/basselin7u/GPU-Restricted-Power-Diagrams
 - AMD Ryzen 5950X
 - 64GB Momery
 
+Thanks for BGAL library: https://github.com/BKHao/BGAL
 
 If you use our code, please consider citing our work:
 ```
