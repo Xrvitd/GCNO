@@ -12,6 +12,14 @@ Doi: https://dl.acm.org/doi/10.1145/3550454.3555443
 - Eigen3
 - Boost
 
+
+### We highly recommend using vcpkg to install dependent libraries!!!
+
+- vcpkg install boost:x64-windows
+- vcpkg install cgal:x64-windows
+- vcpkg install eigen:x64-windows
+
+
 ### Makefile builds (Linux, other Unixes, and Mac. But we recommend using Windows.)
 
 ```
