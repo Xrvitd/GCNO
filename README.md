@@ -41,10 +41,12 @@ ALL_BUILD -> INSTALL
 Turn to Release -> ALL_BUILD -> INSTALL
 
 Please set MAIN as Startup Project, and make the following changes:
+
 Properties -> Configuration Properties -> C/C++ -> Code Generation -> 
 - Enable Parallel Code Generation : Yes
 - Enable Enhanced Instruction Set : AVX2
 - Floating Point Model : Fast
+
 Properties -> Configuration Properties -> C/C++ -> Language -> Open MP Support : Yes
 
 ## Test
