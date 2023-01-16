@@ -1,7 +1,7 @@
 # Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field
 Code of Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field.
 
-We will publish the code on GitHub after the article is accepted.
+We will publish the code on GitHub after the paper is accepted.
 
 Currently we have only tested our code on 64-bit windows systems and Visual Studio 2022 Professional.
 
@@ -60,6 +60,8 @@ The output files is in 'NormalOrientation\data\Out\'.
 
 We put the result of our operation in 'NormalOrientation\data\MyResult\', you can use it for comparison to know whether the program is running correctly.
 
+
+
 ## IMPORTANT NOTE: 
 This code is not optimized for speed, but for clarity. 
 Please open Openmp and AVX2 in Visual Studio to speed up the code.
@@ -67,9 +69,9 @@ Please set the floating point model to fast in Visual Studio to speed up the cod
 The default number of Openmp parallel threads is 28, set according to an AMD Ryzen 5950x CPU, 
 please set different number of threads according to the CPU you use to get the best running effect.
 
-<img src="pics\image-20230116154151378.png" alt="image-20230116154151378" style="zoom:20%;" />
+<img src="pics\image-20230116154151378.png" alt="image-20230116154151378" style="zoom:40%;" />
 
-<img src="pics\image-20230116154210583.png" alt="image-20230116154210583" style="zoom:20%;" />
+<img src="pics\image-20230116154210583.png" alt="image-20230116154210583" style="zoom:40%;" />
 
 
 ## Testing Platform
