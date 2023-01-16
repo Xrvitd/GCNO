@@ -79,7 +79,7 @@ mark_domains(CDT& cdt)
 
 using namespace std;
 
-#define My_MAX 0.1
+#define My_MAX 1.1
 
 class PlaneCut
 {
@@ -96,6 +96,7 @@ public:
 	PlaneCut(const char* filename);
 	//从一个文件开始
 	bool CutByPlane(Plane plane);
+	double CutByPlaneGetCutArea(Plane plane);
 };
 
 PlaneCut::PlaneCut()
@@ -203,7 +204,7 @@ bool PlaneCut::CutByPlane(Plane plane)
 
 	Planes.push_back(plane);
 
-	return 1;
+	/*return 1;*/
 
 
 	vector<double> scalarField;
@@ -244,7 +245,10 @@ bool PlaneCut::CutByPlane(Plane plane)
 		scalarField.push_back(value);
 	}
 	//计算标量场
-
+	if (!ifzheng)
+	{
+		return 0;
+	}
 	/*if (ifzheng)
 	{
 		return 1;
@@ -299,6 +303,7 @@ bool PlaneCut::CutByPlane(Plane plane)
 			isoPoint.push_back(np);
 		}
 	}
+	polygon.area();
 	//计算二维投影坐标
 
 	CDT cdt;
@@ -377,4 +382,104 @@ bool PlaneCut::CutByPlane(Plane plane)
 
 	*CuttedMesh = MyBaseModel(Last_verts, Last_faces);
 	return 1;
+}
+
+
+double PlaneCut::CutByPlaneGetCutArea(Plane plane)
+{
+	double area = 0;
+	double a, b, c, d;
+	a = plane.a();
+	b = plane.b();
+	c = plane.c();
+	d = plane.d();
+
+	//Planes.push_back(plane);
+
+	/*return 1;*/
+
+
+	vector<double> scalarField;
+	vector<Eigen::Vector3d> vertics = CuttedMesh->GetVertices();
+	map<Eigen::Vector3d, int> Vmap;
+
+
+	Eigen::Vector3d P1 = vertics[0];
+	K::Point_3 P1_Cgal(P1.x(), P1.y(), P1.z());
+	bool side = plane.has_on_positive_side(P1_Cgal);
+	bool conti = 0;
+	for (int i = 1; i < vertics.size(); i++)
+	{
+		K::Point_3 Pnow(vertics[i].x(), vertics[i].y(), vertics[i].z());
+		if (plane.has_on_positive_side(Pnow) != side)
+		{
+			conti = 1;
+			break;
+		}
+	}
+	if (!conti)
+	{
+		return 0;
+	}
+
+
+
+
+	//int id = 0;
+	bool ifzheng = 0;
+	for (auto p : vertics)
+	{
+		double value = a * p.x() + b * p.y() + c * p.z() + d;
+		if (value > 0)
+		{
+			ifzheng = 1;
+		}
+		scalarField.push_back(value);
+	}
+	//计算标量场
+
+	auto isoline = CuttedMesh->ExtractIsoline(scalarField, 0);
+
+	if (isoline.size() == 0)
+	{
+		return 0;
+	}
+	*CuttedMesh = CuttedMesh->SplitModelByIsoline(scalarField, 0).first;
+
+	//切割模型
+	auto vec = plane.orthogonal_vector();
+
+	Eigen::Vector3d dir1(isoline[0][1].x() - isoline[0][0].x(), isoline[0][1].y() - isoline[0][0].y(), isoline[0][1].z() - isoline[0][0].z()), dir2(vec.x(), vec.y(), vec.z());
+	dir1.normalize();
+	dir2.normalize();
+	Eigen::Vector3d dir3 = dir1.cross(dir2);
+	dir3.normalize();
+	//计算新的基向量
+
+	struct isoPoints
+	{
+		Eigen::Vector3d locaInWorld;
+		Eigen::Vector2d locaInPlane;
+		int pId;
+	};
+
+	vector<isoPoints> isoPoint;
+	Polygon_2 polygon;
+	for (auto loop : isoline)
+	{
+		for (auto p : loop)
+		{
+			isoPoints np;
+			np.locaInWorld = p;
+			np.locaInPlane.x() = dir3.dot(p - isoline[0][0]);
+			np.locaInPlane.y() = dir1.dot(p - isoline[0][0]);
+			polygon.push_back(Point(np.locaInPlane.x(), np.locaInPlane.y()));
+			isoPoint.push_back(np);
+		}
+	}
+	area = abs(polygon.area());
+
+	//cout << area << endl;
+	return area;
+
 }
