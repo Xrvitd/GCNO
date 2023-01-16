@@ -13,9 +13,10 @@ Currently we have only tested our code on 64-bit windows systems and Visual Stud
 
 ### Please using vcpkg to install dependent libraries!!!
 
-- vcpkg install boost:x64-windows
-- vcpkg install cgal:x64-windows
-- vcpkg install eigen:x64-windows
+- .\vcpkg install boost:x64-windows
+- .\vcpkg install cgal:x64-windows
+- .\vcpkg install eigen:x64-windows
+- .\vcpkg integrate install
 
 
 
@@ -39,7 +40,12 @@ Configure->Generate->Open Project
 ALL_BUILD -> INSTALL
 Turn to Release -> ALL_BUILD -> INSTALL
 
-
+Please set MAIN as Startup Project, and make the following changes:
+Properties -> Configuration Properties -> C/C++ -> Code Generation -> 
+- Enable Parallel Code Generation : Yes
+- Enable Enhanced Instruction Set : AVX2
+- Floating Point Model : Fast
+Properties -> Configuration Properties -> C/C++ -> Language -> Open MP Support : Yes
 
 ## Test
 
@@ -53,6 +59,7 @@ Please open Openmp and AVX2 in Visual Studio to speed up the code.
 Please set the floating point model to fast in Visual Studio to speed up the code.
 The default number of Openmp parallel threads is 28, set according to an AMD Ryzen 5950x CPU, 
 please set different number of threads according to the cpu you use to get the best running effect.
+
 
 ## Testing Platform
 - Windows 10 
