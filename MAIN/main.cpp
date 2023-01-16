@@ -367,7 +367,7 @@ void WindingNumLBFGSTest(string modelpath, string model, vector<vector<Eigen::Ve
 		}
 		
 
-		if (1) //Ô¼Êø·¨Ïòold
+		if (1) //normal cons
 		{
 
 			for (int i = 0; i < n; i++)
@@ -446,47 +446,47 @@ void WindingNumLBFGSTest(string modelpath, string model, vector<vector<Eigen::Ve
 		ofstream outQp;
 		ofstream outwd;
 
-		if (Ifdoublelyer)
-		{
-			outQp.open(modelpath + "Out\\" + model + to_string(fgNum) + "_Double_QueryPoints.txt");
-			outwd.open(modelpath + "Out\\" + model + to_string(fgNum) + "_Double_WindingNums.txt");
-		}
-		else
-		{
-			outQp.open(modelpath + "Out\\" + model + "_QueryPoints.txt");
-			outwd.open(modelpath + "Out\\" + model + "_WindingNums.txt");
-		}
-		for (int i = 0; i < n; i++)
-		{
-			for (int qpid = 0; qpid < VDPs_QC[i].size(); qpid++)
-			{
-				auto queryP = VDPs_QC[i][qpid];
-				pair<int, int> Nid(i,qpid);
-				if (WdNum[Nid.first][Nid.second] > maxWD )
-				{
-					outQp << queryP.transpose() << " " << 0 << " 0 1" << endl;
-				}
-				else
-				{
-					if (WdNum[Nid.first][Nid.second] < minWD)
-					{
-						outQp << queryP.transpose() << " " << 0 << " 1 0" << endl;
-					}
-					else
-					{
-						outQp << queryP.transpose() << " " << (WdNum[Nid.first][Nid.second] - minWD) / (maxWD - minWD) << " 0 0" << endl;
-						
-						
-					}
-				}
-				outwd << WdNum[Nid.first][Nid.second] << "\n";
-				//outwd << WdNum[Nid.first][Nid.second] <<"    "<<i<<" "<<qpid << "\n";
-				continue;
-			}
-			
-		}
-		outQp.close();
-		outwd.close();
+		//if (Ifdoublelyer)
+		//{
+		//	outQp.open(modelpath + "Out\\" + model + to_string(fgNum) + "_Double_QueryPoints.txt");
+		//	outwd.open(modelpath + "Out\\" + model + to_string(fgNum) + "_Double_WindingNums.txt");
+		//}
+		//else
+		//{
+		//	outQp.open(modelpath + "Out\\" + model + "_QueryPoints.txt");
+		//	outwd.open(modelpath + "Out\\" + model + "_WindingNums.txt");
+		//}
+		//for (int i = 0; i < n; i++)
+		//{
+		//	for (int qpid = 0; qpid < VDPs_QC[i].size(); qpid++)
+		//	{
+		//		auto queryP = VDPs_QC[i][qpid];
+		//		pair<int, int> Nid(i,qpid);
+		//		if (WdNum[Nid.first][Nid.second] > maxWD )
+		//		{
+		//			outQp << queryP.transpose() << " " << 0 << " 0 1" << endl;
+		//		}
+		//		else
+		//		{
+		//			if (WdNum[Nid.first][Nid.second] < minWD)
+		//			{
+		//				outQp << queryP.transpose() << " " << 0 << " 1 0" << endl;
+		//			}
+		//			else
+		//			{
+		//				outQp << queryP.transpose() << " " << (WdNum[Nid.first][Nid.second] - minWD) / (maxWD - minWD) << " 0 0" << endl;
+		//				
+		//				
+		//			}
+		//		}
+		//		outwd << WdNum[Nid.first][Nid.second] << "\n";
+		//		//outwd << WdNum[Nid.first][Nid.second] <<"    "<<i<<" "<<qpid << "\n";
+		//		continue;
+		//	}
+		//	
+		//}
+		//outQp.close();
+		//outwd.close();
 		
 		//cout << "Func: " << func << " LossWindingNum: " << losswdn << " LossNormal: " << lossNor << " LossVariance: "<<lossFC<< " NormG: "<< g.norm()  << endl;
 		return func;
@@ -511,10 +511,8 @@ void WindingNumLBFGSTest(string modelpath, string model, vector<vector<Eigen::Ve
 		auto Q1 = V3toV2(N_ball);
 
 		iterX(i * 2) = rand();
-		iterX(i * 2 + 1) = rand();
+		iterX(i * 2 + 1) = rand(); // Here, we use random normal vectors to start the optimization.
 		
-		/*iterX(i * 2) = Q.first;
-		iterX(i * 2 + 1) = Q.second;*/
 
 		RightX(i * 2) = Q.first;
 		RightX(i * 2 + 1) = Q.second;
@@ -559,13 +557,16 @@ int main()
 	// In order to allow you to view the optimization process in more detail, 
 	// we have not set the optimization stop condition, you can manually stop the optimization, 
 	// and view all iteration results in the data\out folder
+	
+	// A noise-free point cloud generally requires about 50 iterations, and a noisy point cloud may require more.
 
 
 	string modelpath = "..\\..\\data\\";
 	string modelname;
 	omp_set_num_threads(14);
 	{
-		modelname = "BS_1000_torus";
+		modelname = "BS_1000_torus"; // 
+
 		cout << modelname << endl;
 		bool Ifdoublelyer = 1; //change this to 0 if you want to try f_{01} = \sum_j^M -w_j
 
