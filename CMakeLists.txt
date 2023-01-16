@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
 set(CMAKE_TOOLCHAIN_FILE C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake)
-project(RFEPS)
+project(NormalOrientation)
 
 
 # Default Build_type RELEASE
@@ -14,7 +14,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/lib)
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-option(CMAKE_INSTALL_PREFIX "RFEPS install PATH" /usr/local)
+option(CMAKE_INSTALL_PREFIX "NormalOrientation install PATH" /usr/local)
 # include header from project_source_dir
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
