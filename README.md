@@ -67,9 +67,9 @@ Please set the floating point model to fast in Visual Studio to speed up the cod
 The default number of Openmp parallel threads is 28, set according to an AMD Ryzen 5950x CPU, 
 please set different number of threads according to the CPU you use to get the best running effect.
 
-<img src="pics\image-20230116154151378.png" alt="image-20230116154151378" style="zoom:50%;" />
+<img src="pics\image-20230116154151378.png" alt="image-20230116154151378" style="zoom:20%;" />
 
-<img src="pics\image-20230116154210583.png" alt="image-20230116154210583" style="zoom:50%;" />
+<img src="pics\image-20230116154210583.png" alt="image-20230116154210583" style="zoom:20%;" />
 
 
 ## Testing Platform
