@@ -21,7 +21,7 @@ Currently we have only tested our code on 64-bit windows systems and Visual Stud
 
   ​	use "git pull" if you get errors with the "gmp" library.
 
-- .\vcpkg install eigen:x64-windows
+- .\vcpkg install Eigen3:x64-windows
 
 - .\vcpkg integrate install
 
