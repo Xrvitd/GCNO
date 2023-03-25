@@ -84,7 +84,6 @@ please set different number of threads according to the CPU you use to get the b
 - AMD Ryzen 5950X
 - 32GB Memory
 
-Considering that most computers do not have this configuration, this commit does not support acceleration.
 
 In order to allow you to view the optimization process in more detail, 
 we have not set the optimization stop condition, you can manually stop the optimization, and view all iteration results in the data\out folder
