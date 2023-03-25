@@ -1,8 +1,6 @@
 # Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field
 Code of Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field.
 
-We will publish the code on GitHub after the paper is accepted.
-
 Currently we have only tested our code on 64-bit windows systems and Visual Studio 2022 Professional.
 
 ### Dependence
