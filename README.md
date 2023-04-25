@@ -1,5 +1,8 @@
 # Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field
 Code of Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field.
+The paper is published in ACM Transactions on Graphics (SIGGRAPH 2023).
+Project link: https://xrvitd.github.io/Projects/GCNO/index.html
+Paper link: https://arxiv.org/abs/2304.11605
 
 Currently we have only tested our code on 64-bit windows systems and Visual Studio 2022 Professional.
 
@@ -88,5 +91,19 @@ please set different number of threads according to the CPU you use to get the b
 In order to allow you to view the optimization process in more detail, 
 we have not set the optimization stop condition, you can manually stop the optimization, and view all iteration results in the data\out folder
 
+
+If you use our code, please consider citing our work:
+```
+@article{Rui2023GCNO,
+ author    = {Xu, Rui and Dou, Zhiyang and Wang, Ningna and Xin, Shiqing and Chen, Shuangmin and Jiang, Mingyan and Guo, Xiaohu and Wang, Wenping and Tu, Changhe},
+ title     = {Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field},
+ journal   = {ACM Transactions on Graphics (TOG)},
+ year      = {2023},
+ publisher = {ACM},
+ doi = {10.1145/3592129},
+ booktitle = {ACM SIGGRAPH 2023 Papers},
+ series = {SIGGRAPH '23}
+}
+```
 
 
