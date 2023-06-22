@@ -16,7 +16,7 @@ Currently we have only tested our code on 64-bit windows systems and Visual Stud
 
 ### Please using vcpkg to install dependent libraries!!!
 
-#### Important: Please use  "git clone" to install vcpkg, otherwise you may get errors in cgal installation.
+**Important: Please use  "git clone" to install vcpkg, otherwise you may get errors in cgal installation.**
 
 - .\vcpkg install boost:x64-windows
 
