@@ -1,6 +1,7 @@
 # Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field
 
 This paper is published at ACM Transactions on Graphics (SIGGRAPH 2023). Please refer to our [paper](https://arxiv.org/abs/2304.11605) and [project](https://xrvitd.github.io/Projects/GCNO/index.html) for more detail.
+
 We just got the SIGGRAPH 2023 Best Paper Award!!! Congrats!
 
 ![](./pics/teaser4.png)
