@@ -9,14 +9,21 @@ We just got the SIGGRAPH 2023 Best Paper Award!!! Congrats!
 
 ```
 @article{Rui2023GCNO,
- author    = {Xu, Rui and Dou, Zhiyang and Wang, Ningna and Xin, Shiqing and Chen, Shuangmin and Jiang, Mingyan and Guo, Xiaohu and Wang, Wenping and Tu, Changhe},
- title     = {Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field},
- journal   = {ACM Transactions on Graphics (TOG)},
- year      = {2023},
- publisher = {ACM},
- doi = {10.1145/3592129},
- booktitle = {ACM SIGGRAPH 2023 Papers},
- series = {SIGGRAPH '23}
+author = {Xu, Rui and Dou, Zhiyang and Wang, Ningna and Xin, Shiqing and Chen, Shuangmin and Jiang, Mingyan and Guo, Xiaohu and Wang, Wenping and Tu, Changhe},
+title = {Globally Consistent Normal Orientation for Point Clouds by Regularizing the Winding-Number Field},
+year = {2023},
+issue_date = {August 2023},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {42},
+number = {4},
+issn = {0730-0301},
+url = {https://doi.org/10.1145/3592129},
+doi = {10.1145/3592129},
+month = {jul},
+articleno = {111},
+numpages = {15},
+keywords = {Voronoi diagram, winding number, normal orientation, raw point cloud, optimization}
 }
 ```
 
