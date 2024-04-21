@@ -523,7 +523,8 @@ void WindingNumLBFGSTest(string modelpath, string model, vector<vector<Eigen::Ve
 	}
 	outStart.close();
 	Eigen::VectorXd TempG(n * 2);
-	cout << "Init loss: " << fg(RightX, TempG) << endl;
+	// open this to check the gt normal loss, note that if using this, the first iter output will be GT
+	// cout << "Init loss: " << fg(RightX, TempG) << endl;
 
 	//return;
 	cout << "Start opt...\n";
