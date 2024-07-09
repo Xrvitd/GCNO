@@ -112,8 +112,8 @@ please set different number of threads according to the CPU you use to get the b
 
 💡💡💡 **Stop condition**
 
-For viewing the optimization process in more detail, we have not set the optimization stop condition. Please manually stop the optimization and view all iteration results in the `data\out` folder
-
+For viewing the optimization process in more detail, we have not set the optimization stop condition. Please manually stop the optimization and view all iteration results in the `data\out` folder.
+Please note that the running time of our method is closely related to the complexity of the model, so please try to **let it run as long as possible**. With OMP enabled, a point cloud with more than 50,000 points may still take more than 24 hours to run.
 
 ## License
 GCNO is under [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.en.html), so any downstream solution and products (including cloud services) that include GCNO code inside it should be open-sourced to comply with the AGPL conditions. For learning purposes only and not for commercial use. If you want to use it for commercial purposes, please contact us first.
