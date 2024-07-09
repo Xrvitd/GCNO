@@ -117,7 +117,7 @@ For viewing the optimization process in more detail, we have not set the optimiz
 Please note that the running time of our method is closely related to the complexity of the model, so please try to **let it run as long as possible**. With OMP enabled, a point cloud with more than 50,000 points may still take more than 24 hours to run.
 Now the parameters are set to: 
 ```
-  para.epsilon = 1e-10;
+  	para.epsilon = 1e-10;
 	para.max_iteration = 9999;
 	para.max_linearsearch = 100;
 ```
