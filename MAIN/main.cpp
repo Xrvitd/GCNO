@@ -493,11 +493,11 @@ void WindingNumLBFGSTest(string modelpath, string model, vector<vector<Eigen::Ve
 	};
 	BGAL::_LBFGS::_Parameter para;
 	para.is_show = true;
-	para.epsilon = 1e-8;
-	para.max_iteration = 150;
+	para.epsilon = 1e-10;
+	para.max_iteration = 9999;
 	//para.max_time = 1000*1000;
 		
-	para.max_linearsearch = 20;
+	para.max_linearsearch = 100;
 	
 	BGAL::_LBFGS lbfgs(para);
 	Eigen::VectorXd iterX(n * 2);
